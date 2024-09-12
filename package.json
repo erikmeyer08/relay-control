@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dot-env": "^0.0.1",
     "express": "^4.21.0",
     "onoff": "^6.0.3"
   },
