@@ -1,6 +1,5 @@
 const dotenv = require('dotenv');
 const envPath = `./${process.env.NODE_ENV || 'production'}.env`;
-
 const result = dotenv.config({ path: envPath });
 
 if (result.error) {
@@ -8,6 +7,5 @@ if (result.error) {
 }
 
 module.exports = {
-    port: process.env.PORT || 8080,
-    key: process.env.API_KEY,
+    port: process.env.PORT,
 };
