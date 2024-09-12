@@ -17,9 +17,9 @@ const relay = async (req, res, next) => {
         }
 
         if (isLinux) {
-            // const gpio = new Gpio(relayNumber, 'out');
-            // gpio.writeSync(stateNumber);
-            // gpio.unexport();
+            const gpio = new Gpio(relayNumber, 'out');
+            gpio.writeSync(stateNumber);
+            gpio.unexport();
             console.log(`GPIO: Relay ${relayNumber} set to ${stateNumber}`);
         } else {
             console.log(`Simulating GPIO control: Relay ${relayNumber} set to ${stateNumber}`);
