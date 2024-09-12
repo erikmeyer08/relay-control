@@ -2,7 +2,6 @@ const Gpio = require('onoff').Gpio;
 const isLinux = process.platform === 'linux';
 
 const relay = async (req, res, next) => {
-    console.log('test')
     try {
         const { relay, state } = req.body;
         const relayNumber = Number(relay);
