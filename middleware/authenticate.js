@@ -1,7 +1,8 @@
+const apiConfig= require('../config/index')
+
 const authenticate = (req, res, next) => {
     const suppliedKey = req.header('x-api-key');
-    // const validApiKey = process.env.API_KEY;
-    const key = '1234'
+    const key = apiConfig.key;
 
     if (!suppliedKey) {
         return res.status(401).json({ error: 'API key is missing' });
