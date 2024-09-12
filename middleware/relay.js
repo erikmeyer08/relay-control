@@ -1,13 +1,9 @@
 const Gpio = require('onoff').Gpio;
-
-// Check if the platform is Raspberry Pi (Linux-based)
 const isLinux = process.platform === 'linux';
 
 const relay = async (req, res, next) => {
     try {
         const { relay, state } = req.body;
-
-        // Ensure relay and state are numbers
         const relayNumber = Number(relay);
         const stateNumber = Number(state);
 
@@ -19,11 +15,11 @@ const relay = async (req, res, next) => {
             return res.status(400).json({ status: 'failure', error: 'State must be 0 or 1.' });
         }
 
-        // Only run GPIO control on Raspberry Pi
         if (isLinux) {
             const gpio = new Gpio(relayNumber, 'out');
             gpio.writeSync(stateNumber);
             gpio.unexport();
+            console.log(`GPIO: Relay ${relayNumber} set to ${stateNumber}`);
         } else {
             console.log(`Simulating GPIO control: Relay ${relayNumber} set to ${stateNumber}`);
         }
