@@ -1,13 +1,9 @@
-const dotenv = require('dotenv');
-const envPath = `./${process.env.NODE_ENV || 'production'}.env`;
-
-const result = dotenv.config({ path: envPath });
-
-if (result.error) {
-    console.error(`Error loading ${envPath}:`, result.error);
-}
+const api = require('./api/api');
+const mongodb = require('./mongodb/mongodb');
+const server = require('./server/server');
 
 module.exports = {
-    port: process.env.PORT || 8080,
-    key: process.env.API_KEY,
+    apiConfig: api,
+    mongodbConfig: mongodb,
+    serverConfig: server,
 };
