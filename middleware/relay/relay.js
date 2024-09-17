@@ -1,6 +1,7 @@
 const Gpio = require('onoff').Gpio;
 const isLinux = process.platform === 'linux';
-const { getRelayStates, upsertRelayState } = require('../relay/database');
+const checkPlatform = require('../platform/check');
+const { getRelayStates, upsertRelayState } = require('./database');
 
 // Get Relay State with search by relay, state, or both
 const getRelay = async (req, res, next) => {
@@ -59,7 +60,7 @@ const postRelay = async (req, res, next) => {
         }
 
         // Handle the GPIO control
-        if (isLinux) {
+        if (checkPlatform()) {
             const gpio = new Gpio(relayNumber, 'out');
             gpio.writeSync(stateNumber);
             gpio.unexport();
