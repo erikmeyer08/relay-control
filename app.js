@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const mongoose = require('./middleware/mongodb/mongodb')
 const relayRoutes = require('./routes/relay');
+require('./middleware/relay/startup');
 
 app.use(express.json());
 
