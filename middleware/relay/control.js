@@ -12,7 +12,7 @@ const setRelay = async (relayNumber, stateNumber) => {
     }
 
     // Handle the GPIO control
-    if (false) {
+    if (true) {
         const gpio = new Gpio(relayNumber, 'out');
         gpio.writeSync(stateNumber);
         gpio.unexport();
