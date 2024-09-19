@@ -17,6 +17,7 @@
     "epoll": "^4.0.2",
     "express": "^4.21.0",
     "mongoose": "^8.6.2",
+    "node-cron": "^3.0.3",
     "onoff": "^6.0.3"
   },
   "devDependencies": {

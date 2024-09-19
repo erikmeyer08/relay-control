@@ -9,6 +9,10 @@ const relayStateSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    schedule: {
+        type: String,
+        required: true
+    },
     timestamp: {
         type: Date,
         default: Date.now

@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const mongoose = require('./middleware/mongodb/mongodb') // MongoDB connection logic
+const mongoose = require('./middleware/mongodb/mongodb');
 const relayRoutes = require('./routes/relay');
 
 // Middleware to parse JSON
@@ -29,7 +29,8 @@ app.use((err, req, res, next) => {
 });
 
 // Restore relay states on startup
-require('./middleware/relay/startup');
+// require('./middleware/relay/startup');
+// require('./middleware/relay/cron');
 
 // Export the Express app
 module.exports = app;
