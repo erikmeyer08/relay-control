@@ -54,6 +54,26 @@ export class RelayService {
       throw new RelayDisabledError(id);
     }
 
+    if (state === 'on' && relay.definition.interlockGroup) {
+      for (const [otherId, otherRelay] of this.relays.entries()) {
+        if (
+          otherId !== id &&
+          otherRelay.definition.enabled &&
+          otherRelay.definition.interlockGroup === relay.definition.interlockGroup
+        ) {
+          otherRelay.channel.write('off');
+          this.logger.info(
+            {
+              relayId: otherId,
+              gpio: otherRelay.definition.gpio,
+              interlockGroup: relay.definition.interlockGroup
+            },
+            'relay switched off by interlock'
+          );
+        }
+      }
+    }
+
     relay.channel.write(state);
 
     const snapshot = this.snapshot(relay);
