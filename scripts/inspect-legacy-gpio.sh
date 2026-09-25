@@ -4,7 +4,7 @@ set -euo pipefail
 LEGACY_IDS=(598 593 587 597)
 
 echo "===== LEGACY GPIO LOOKUP ====="
-for id in "$\{LEGACY_IDS[@]\}"; do
+for id in "${LEGACY_IDS[@]\}"; do
   echo
   echo "--- GPIO $id ---"
   if [[ -e "/sys/class/gpio/gpio$id" ]]; then
