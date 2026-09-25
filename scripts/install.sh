@@ -46,6 +46,7 @@ if [[ ! -f "$CONFIG_ROOT/relay-control.yaml" ]]; then
 fi
 
 install -o root -g root -m 0644 systemd/relay-control.service /etc/systemd/system/relay-control.service
+install -o root -g root -m 0755 scripts/update-release.sh /usr/local/sbin/relay-control-update
 systemctl daemon-reload
 
 echo
