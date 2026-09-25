@@ -63,7 +63,7 @@ The updater downloads the GitHub Release archive and its SHA-256 checksum, verif
 
 ## Release process
 
-A `vX.Y.Z` Git tag triggers the release workflow. CI validates shell syntax, TypeScript, tests, build output, and the production dependency audit before publishing:
+Merging a new package version to `main` triggers the release workflow, which creates the matching `vX.Y.Z` tag/release when it does not already exist. CI validates shell syntax, TypeScript, tests, build output, and the production dependency audit before publishing:
 
 - `relay-control-vX.Y.Z.tar.gz`
 - `relay-control-vX.Y.Z.tar.gz.sha256`
