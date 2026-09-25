@@ -1,0 +1,33 @@
+controller:
+  id: mnmcoprc1001
+  name: Pool Equipment Relay Controller
+  location: MCO pool equipment
+
+relays:
+  - id: "speed-1"
+    name: Speed 1
+    gpio: 27
+    activeLow: true
+    startupState: off
+    enabled: true
+
+  - id: "speed-2"
+    name: Speed 2
+    gpio: 22
+    activeLow: true
+    startupState: off
+    enabled: true
+
+  - id: "speed-3"
+    name: Speed 3
+    gpio: 16
+    activeLow: true
+    startupState: off
+    enabled: true
+
+  - id: "quick-clean"
+    name: Quick Clean
+    gpio: 26
+    activeLow: true
+    startupState: off
+    enabled: true
