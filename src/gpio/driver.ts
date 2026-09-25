@@ -7,5 +7,5 @@ export interface GpioChannel {
 }
 
 export interface GpioDriver {
-  open(gpio: number, activeLow: boolean): GpioChannel;
+  open(gpio: number, activeLow: boolean, initialState: RelayState): GpioChannel;
 }
