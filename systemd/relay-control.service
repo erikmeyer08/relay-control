@@ -9,8 +9,9 @@ User=relay-control
 Group=relay-control
 SupplementaryGroups=gpio
 WorkingDirectory=/opt/relay-control/current
+Environment=PATH=/usr/local/bin:/usr/bin:/bin
 EnvironmentFile=/etc/relay-control/relay-control.env
-ExecStart=/usr/bin/node /opt/relay-control/current/dist/server.js
+ExecStart=/usr/bin/env node /opt/relay-control/current/dist/server.js
 Restart=on-failure
 RestartSec=3
 TimeoutStopSec=15
