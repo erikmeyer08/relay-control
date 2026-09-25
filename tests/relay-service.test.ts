@@ -44,4 +44,34 @@ describe('RelayService', () => {
     expect(() => service.get('missing')).toThrow(RelayNotFoundError);
     expect(() => service.setState('disabled', 'on')).toThrow(RelayDisabledError);
   });
+  it('turns off peers in the same interlock group before activating a relay', () => {
+    const service = new RelayService([
+      {
+        id: 'speed-1',
+        name: 'Speed 1',
+        gpio: 27,
+        activeLow: true,
+        startupState: 'off',
+        enabled: true,
+        interlockGroup: 'pump-speed'
+      },
+      {
+        id: 'speed-2',
+        name: 'Speed 2',
+        gpio: 22,
+        activeLow: true,
+        startupState: 'off',
+        enabled: true,
+        interlockGroup: 'pump-speed'
+      }
+    ], new MemoryGpioDriver(), logger);
+
+    service.initializeSafeState();
+    service.setState('speed-1', 'on');
+    expect(service.get('speed-1').state).toBe('on');
+
+    service.setState('speed-2', 'on');
+    expect(service.get('speed-1').state).toBe('off');
+    expect(service.get('speed-2').state).toBe('on');
+  });
 });
