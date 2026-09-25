@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-REF="$\{1:-rewrite/v2\}"
-REPO_URL="$\{RELAY_CONTROL_REPO_URL:-https://github.com/erikmeyer08/relay-control.git\}"
+REF="${1:-rewrite/v2\}"
+REPO_URL="${RELAY_CONTROL_REPO_URL:-https://github.com/erikmeyer08/relay-control.git\}"
 WORK_ROOT="$(mktemp -d)"
 trap 'rm -rf "$WORK_ROOT"' EXIT
 
@@ -27,7 +27,7 @@ systemctl restart relay-control.service
 sleep 3
 
 PORT="$(awk -F= '/^PORT=/{print $2}' /etc/relay-control/relay-control.env | tail -n1)"
-PORT="$\{PORT:-8080\}"
+PORT="${PORT:-8080\}"
 
 if curl --fail --silent --show-error "http://127.0.0.1:$PORT/health/live" >/dev/null; then
   echo "Relay Control $RELEASE_VERSION is healthy."
