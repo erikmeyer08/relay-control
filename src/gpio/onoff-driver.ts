@@ -29,7 +29,13 @@ class OnoffChannel implements GpioChannel {
 }
 
 export class OnoffGpioDriver implements GpioDriver {
-  open(gpio: number, activeLow: boolean): GpioChannel {
-    return new OnoffChannel(new Gpio(gpio, 'out'), activeLow);
+  open(gpio: number, activeLow: boolean, initialState: RelayState): GpioChannel {
+    const logicalOn = initialState === 'on';
+    const physical = activeLow
+      ? (logicalOn ? 0 : 1)
+      : (logicalOn ? 1 : 0);
+
+    const direction = physical === 1 ? 'high' : 'low';
+    return new OnoffChannel(new Gpio(gpio, direction), activeLow);
   }
 }
