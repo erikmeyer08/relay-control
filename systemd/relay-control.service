@@ -1,0 +1,32 @@
+[Unit]
+Description=Relay Control hardware API
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=relay-control
+Group=relay-control
+SupplementaryGroups=gpio
+WorkingDirectory=/opt/relay-control/current
+EnvironmentFile=/etc/relay-control/relay-control.env
+ExecStart=/usr/bin/node /opt/relay-control/current/dist/server.js
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=15
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/relay-control
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+RestrictRealtime=true
+SystemCallArchitectures=native
+
+[Install]
+WantedBy=multi-user.target
