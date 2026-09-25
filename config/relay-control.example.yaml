@@ -1,0 +1,17 @@
+controller:
+  id: rlcmco1001
+  name: Relay Controller
+  location: pool-equipment
+relays:
+  - id: "1"
+    name: Relay 1
+    gpio: 22
+    activeLow: false
+    startupState: off
+    enabled: true
+  - id: "2"
+    name: Relay 2
+    gpio: 16
+    activeLow: false
+    startupState: off
+    enabled: true

@@ -1,0 +1,59 @@
+name: Release Relay Control
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install --ignore-scripts
+
+      - name: Validate
+        run: |
+          bash -n scripts/*.sh
+          npm run typecheck
+          npm test
+          npm run build
+          npm audit --omit=dev --audit-level=high
+
+      - name: Build release package
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          VERSION="${GITHUB_REF_NAME#v}"
+          PACKAGE_VERSION="$(node -p "require('./package.json').version")"
+
+          if [[ "$VERSION" != "$PACKAGE_VERSION" ]]; then
+            echo "Tag version $VERSION does not match package.json $PACKAGE_VERSION"
+            exit 1
+          fi
+
+          mkdir -p release/relay-control
+          cp -a dist package.json package-lock.json systemd scripts config README.md release/relay-control/
+
+          tar -C release -czf "relay-control-v${VERSION}.tar.gz" relay-control
+          sha256sum "relay-control-v${VERSION}.tar.gz" > "relay-control-v${VERSION}.tar.gz.sha256"
+
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME"             "relay-control-${GITHUB_REF_NAME}.tar.gz"             "relay-control-${GITHUB_REF_NAME}.tar.gz.sha256"             --title "Relay Control $GITHUB_REF_NAME"             --generate-notes
