@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-VERSION="$\{1:-\}"
+VERSION="${1:-\}"
 
 if [[ "$EUID" -ne 0 ]]; then
   echo "Run as root: sudo $0 <version>"
@@ -26,7 +26,7 @@ systemctl restart relay-control.service
 sleep 2
 
 PORT="$(awk -F= '/^PORT=/{print $2}' /etc/relay-control/relay-control.env | tail -n1)"
-PORT="$\{PORT:-8080\}"
+PORT="${PORT:-8080\}"
 
 if curl --fail --silent --show-error "http://127.0.0.1:$PORT/health/live" >/dev/null; then
   echo "Rolled back to $VERSION; health check passed."
