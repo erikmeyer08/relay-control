@@ -16,7 +16,8 @@ const relaySchema = z.object({
   gpio: z.number().int().min(0).max(1024),
   activeLow: z.boolean().default(false),
   startupState: z.enum(['on', 'off']).default('off'),
-  enabled: z.boolean().default(true)
+  enabled: z.boolean().default(true),
+  interlockGroup: z.string().min(1).max(64).optional()
 });
 
 const fileSchema = z.object({
