@@ -2,8 +2,11 @@ name: Release Relay Control
 
 on:
   push:
+    branches:
+      - main
     tags:
       - 'v*'
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -22,10 +25,42 @@ jobs:
         with:
           node-version: 20
 
+      - name: Resolve release version
+        id: version
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION="$(node -p "require('./package.json').version")"
+          TAG="v$VERSION"
+
+          if [[ "$GITHUB_REF_TYPE" == "tag" && "$GITHUB_REF_NAME" != "$TAG" ]]; then
+            echo "Tag $GITHUB_REF_NAME does not match package.json $VERSION"
+            exit 1
+          fi
+
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+
+      - name: Check whether release exists
+        id: existing
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+        shell: bash
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "Release $TAG already exists."
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Install dependencies
+        if: steps.existing.outputs.exists != 'true'
         run: npm install --ignore-scripts
 
       - name: Validate
+        if: steps.existing.outputs.exists != 'true'
         run: |
           bash -n scripts/*.sh
           npm run typecheck
@@ -34,17 +69,12 @@ jobs:
           npm audit --omit=dev --audit-level=high
 
       - name: Build release package
+        if: steps.existing.outputs.exists != 'true'
         shell: bash
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
         run: |
           set -euo pipefail
-
-          VERSION="${GITHUB_REF_NAME#v}"
-          PACKAGE_VERSION="$(node -p "require('./package.json').version")"
-
-          if [[ "$VERSION" != "$PACKAGE_VERSION" ]]; then
-            echo "Tag version $VERSION does not match package.json $PACKAGE_VERSION"
-            exit 1
-          fi
 
           mkdir -p release/relay-control
           cp -a dist package.json package-lock.json systemd scripts config README.md release/relay-control/
@@ -53,7 +83,10 @@ jobs:
           sha256sum "relay-control-v${VERSION}.tar.gz" > "relay-control-v${VERSION}.tar.gz.sha256"
 
       - name: Publish GitHub release
+        if: steps.existing.outputs.exists != 'true'
         env:
           GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+          VERSION: ${{ steps.version.outputs.version }}
         run: |
-          gh release create "$GITHUB_REF_NAME"             "relay-control-${GITHUB_REF_NAME}.tar.gz"             "relay-control-${GITHUB_REF_NAME}.tar.gz.sha256"             --title "Relay Control $GITHUB_REF_NAME"             --generate-notes
+          gh release create "$TAG"             "relay-control-v${VERSION}.tar.gz"             "relay-control-v${VERSION}.tar.gz.sha256"             --target "$GITHUB_SHA"             --title "Relay Control $TAG"             --generate-notes
