@@ -43,6 +43,21 @@ export function createApp(options: {
   const api = express.Router();
   api.use(apiKeyAuth(options.apiKeys));
 
+  api.get('/capabilities', (_req, res) => {
+    res.json({
+      apiVersion: 'v1',
+      features: {
+        relayRead: true,
+        relayWrite: true,
+        allOff: true,
+        interlocks: true,
+        localScheduling: false,
+        externalDatabase: false,
+        releaseUpdates: true
+      }
+    });
+  });
+
   api.get('/system', (_req, res) => {
     res.json({
       id: options.config.controller.id,
