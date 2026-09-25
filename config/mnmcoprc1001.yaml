@@ -6,28 +6,32 @@ controller:
 relays:
   - id: "speed-1"
     name: Speed 1
-    gpio: 27
+    gpio: 598
     activeLow: true
     startupState: off
     enabled: true
+    interlockGroup: pump-speed
 
   - id: "speed-2"
     name: Speed 2
-    gpio: 22
+    gpio: 593
     activeLow: true
     startupState: off
     enabled: true
+    interlockGroup: pump-speed
 
   - id: "speed-3"
     name: Speed 3
-    gpio: 16
+    gpio: 587
     activeLow: true
     startupState: off
     enabled: true
+    interlockGroup: pump-speed
 
   - id: "quick-clean"
     name: Quick Clean
-    gpio: 26
+    gpio: 597
     activeLow: true
     startupState: off
     enabled: true
+    interlockGroup: pump-speed
