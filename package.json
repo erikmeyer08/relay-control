@@ -1,6 +1,6 @@
 {
   "name": "relay-control",
-  "version": "2.0.0-alpha.1",
+  "version": "2.0.0-alpha.2",
   "private": true,
   "description": "Secure, hardware-focused relay controller API for Raspberry Pi and Linux GPIO hosts.",
   "main": "dist/server.js",
