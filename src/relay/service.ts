@@ -17,7 +17,7 @@ export class RelayService {
     private readonly logger: Logger
   ) {
     for (const definition of definitions) {
-      const channel = driver.open(definition.gpio, definition.activeLow);
+      const channel = driver.open(definition.gpio, definition.activeLow, definition.startupState);
       this.relays.set(definition.id, { definition, channel });
     }
   }
