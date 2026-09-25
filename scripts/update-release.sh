@@ -72,8 +72,12 @@ else
   install -d -o root -g root -m 0755 "$RELEASE_DIR"
   cp -a "$SOURCE_DIR/." "$RELEASE_DIR/"
   cd "$RELEASE_DIR"
-  npm ci --omit=dev --ignore-scripts
+  npm ci --omit=dev
 fi
+
+install -o root -g root -m 0755 "$RELEASE_DIR/scripts/update-release.sh" /usr/local/sbin/relay-control-update
+install -o root -g root -m 0644 "$RELEASE_DIR/systemd/relay-control.service" /etc/systemd/system/relay-control.service
+systemctl daemon-reload
 
 PREVIOUS=""
 if [[ -L "$APP_ROOT/current" ]]; then
