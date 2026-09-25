@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SOURCE_DIR="$\{1:-\}"
-VERSION="$\{2:-\}"
+SOURCE_DIR="${1:-\}"
+VERSION="${2:-\}"
 
 if [[ "$EUID" -ne 0 ]]; then
   echo "Run as root: sudo $0 <source-directory> <version>"
